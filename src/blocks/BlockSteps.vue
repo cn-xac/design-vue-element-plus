@@ -3,7 +3,7 @@
  * 步骤条。每项写成「标题:描述」，描述可省略。
  */
 import { computed } from "vue";
-import { parsePairs } from "../utils/parse";
+import { parsePairs } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

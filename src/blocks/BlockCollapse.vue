@@ -6,7 +6,7 @@
  * 引擎只能往一个默认槽里塞子节点，拖进来也分不清属于哪个面板。
  */
 import { computed, ref, watch } from "vue";
-import { parseLabels, parsePairs } from "../utils/parse";
+import { parseLabels, parsePairs } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

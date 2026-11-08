@@ -6,7 +6,12 @@
       "@x-ac/design-vue-element-plus": ["src/index.ts"],
       // 本地联调：核心仓与引擎仓源码直接参与类型检查，改完立即生效，不依赖 dist
       "@x-ac/design-core": ["../project/packages/core/src/index.ts"],
-      "@x-ac/design-vue": ["../project/packages/vue/src/index.ts"]
+      "@x-ac/design-vue/kit": ["../project/packages/vue/src/kit.ts"],
+      "@x-ac/design-vue": ["../project/packages/vue/src/index.ts"],
+      // 引擎源码挂在兄弟仓，强制把 vue / element-plus 的类型收敛到本仓单一副本，
+      // 否则 Component 等类型会来自两份 @vue/runtime-core 而互不兼容
+      "vue": ["node_modules/vue"],
+      "element-plus": ["node_modules/element-plus"]
     },
     "types": ["vite/client", "node"]
   },

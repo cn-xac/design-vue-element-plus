@@ -8,7 +8,7 @@
  * 中间层自动合并，重复的祖先只写一次也认。
  */
 import { computed } from "vue";
-import { parsePaths } from "../utils/parse";
+import { parsePaths } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

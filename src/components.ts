@@ -1,5 +1,5 @@
 import type { Component } from "vue";
-import { materialKey } from "@x-ac/design-core";
+import { materialKey, prefixedComponents } from "@x-ac/design-core";
 import {
   ElAlert,
   ElButton,
@@ -154,9 +154,8 @@ const COMPONENT_TABLE: Record<string, Component | string> = {
   "amount-input": FieldAmount,
 };
 
-export const COMPONENT_MAP: Record<string, Component | string> = Object.fromEntries(
-  Object.entries(COMPONENT_TABLE).map(([key, component]) => [materialKey(key), component]),
-);
+/** 裸名 → 协议名的归一化由 core 统一实现，Vue / React 适配层不再各写一遍 */
+export const COMPONENT_MAP: Record<string, Component | string> = prefixedComponents(COMPONENT_TABLE);
 
 export function resolveComponent(component: string): Component | string | null {
   return COMPONENT_MAP[materialKey(component)] ?? COMPONENT_TABLE[component] ?? null;

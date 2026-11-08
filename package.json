@@ -2,7 +2,7 @@
   "name": "@x-ac/design-vue-element-plus",
   "version": "0.4.0",
   "type": "module",
-  "description": "Element Plus 适配包：物料实现 + 双向绑定通道 + 动作副作用（供 @x-ac/design-vue 使用）",
+  "description": "基于 @x-ac/design-vue/kit 适配层的 Element Plus 扩展包：物料实现 + 绑定通道 + 动作副作用 + 设计器控件",
   "license": "MIT",
   "packageManager": "pnpm@12.15.0",
   "main": "./dist/index.js",

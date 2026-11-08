@@ -12,6 +12,8 @@
 import type { Component } from "vue";
 import { ElColorPicker, ElInput, ElInputNumber, ElMessage, ElSwitch } from "element-plus";
 import { type DesignerKit, type UiAdapter } from "@x-ac/design-core";
+// 本包基于 @x-ac/design-vue 的适配层 SDK 组装，不再手写 UiAdapter 字面量
+import { VUE_BINDING, createDesignerKit, defineVueAdapter } from "@x-ac/design-vue/kit";
 import { COMPONENT_MAP, resolveComponent } from "./components";
 import { elementPlusMaterials } from "./materials";
 import { elementAdapter, runActions } from "./actions";
@@ -24,7 +26,7 @@ import EpSelect from "./designer/EpSelect.vue";
  * 宿主用什么库，设计器的按钮、输入框、下拉就是什么库的，避免「设计时与上线两张皮」。
  * 未列出的槽位由引擎回落原生实现。
  */
-const designerKit: DesignerKit<Component> = {
+const designerKit: DesignerKit<Component> = createDesignerKit<Component>({
   Button: EpButton,
   Input: ElInput as unknown as Component,
   NumberInput: ElInputNumber as unknown as Component,
@@ -35,16 +37,16 @@ const designerKit: DesignerKit<Component> = {
   notify: (message, type = "info") => {
     ElMessage({ message, type });
   },
-};
+});
 
-export const elementPlusAdapter: UiAdapter<Component | string> = {
+export const elementPlusAdapter: UiAdapter<Component | string> = defineVueAdapter<Component | string>({
   name: "element-plus",
   components: COMPONENT_MAP,
   materials: elementPlusMaterials,
   designer: designerKit as unknown as DesignerKit<Component | string>,
-  binding: { prop: "modelValue", event: "onUpdate:modelValue" },
+  binding: VUE_BINDING,
   actions: elementAdapter,
-};
+});
 
 export { COMPONENT_MAP, resolveComponent };
 export { elementAdapter, runActions };

@@ -6,7 +6,7 @@
  * 需要远程搜索时用「下拉选择 + 开启 filterable」或者自定义物料。
  */
 import { computed } from "vue";
-import { parseLabels } from "../utils/parse";
+import { parseLabels } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

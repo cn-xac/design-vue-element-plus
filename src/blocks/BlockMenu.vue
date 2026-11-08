@@ -9,7 +9,7 @@
  * 与级联选择共用同一套路径写法，学一次到处能用。
  */
 import { computed } from "vue";
-import { parsePaths } from "../utils/parse";
+import { parsePaths } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

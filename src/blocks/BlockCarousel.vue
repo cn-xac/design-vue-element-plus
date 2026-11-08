@@ -4,7 +4,7 @@
  * 没有图片时给一块占位，避免空转。
  */
 import { computed } from "vue";
-import { parseLabels } from "../utils/parse";
+import { parseLabels } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

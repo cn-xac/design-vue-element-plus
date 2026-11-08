@@ -22,8 +22,9 @@ export default defineConfig({
       beforeWriteFile: (filePath, content) => ({
         filePath,
         content: content.replace(
-          /(?:\.\.\/)+[\w./-]*project\/packages\/(core|vue)\/src/g,
-          (_match, name: string) => `@x-ac/design-${name}`,
+          /(?:\.\.\/)+[\w./-]*project\/packages\/(core|vue)\/src([\w./-]*)/g,
+          (_match, name: string, rest: string) =>
+            `@x-ac/design-${name}${rest.startsWith("/kit") ? "/kit" : ""}`,
         ),
       }),
     }),
@@ -37,7 +38,14 @@ export default defineConfig({
     sourcemap: true,
     emptyOutDir: false,
     rollupOptions: {
-      external: ["vue", "element-plus", /^element-plus\//, "@x-ac/design-core", "@x-ac/design-vue"],
+      external: [
+        "vue",
+        "element-plus",
+        /^element-plus\//,
+        "@x-ac/design-core",
+        "@x-ac/design-vue",
+        "@x-ac/design-vue/kit",
+      ],
       output: {
         entryFileNames: "[name].js",
         assetFileNames: "style.css",

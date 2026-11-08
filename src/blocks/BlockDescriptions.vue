@@ -3,7 +3,7 @@
  * 描述列表。每项写成「标签:值」，与 css 描述列表的心智一致。
  */
 import { computed } from "vue";
-import { parsePairs } from "../utils/parse";
+import { parsePairs } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

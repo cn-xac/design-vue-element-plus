@@ -4,7 +4,7 @@
  * 纯展示组件：菜单点击的动作由 Schema 的 events 挂在根节点上，这里不拦事件。
  */
 import { computed } from "vue";
-import { parseLabels } from "../utils/parse";
+import { parseLabels } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

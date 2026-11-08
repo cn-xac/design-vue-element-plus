@@ -4,6 +4,7 @@
  */
 import { computed } from "vue";
 import { parseOptions } from "@x-ac/design-core";
+import { useFieldModel } from "@x-ac/design-vue/kit";
 
 const props = withDefaults(
   defineProps<{
@@ -26,10 +27,11 @@ const emit = defineEmits<{
 
 const items = computed(() => parseOptions(props.options));
 
-function onChange(value: unknown): void {
-  emit("update:modelValue", value);
-  emit("change", value);
-}
+const { onUpdate } = useFieldModel(
+  () => props.modelValue,
+  (value) => emit("update:modelValue", value),
+  (value) => emit("change", value),
+);
 </script>
 
 <template>
@@ -39,7 +41,7 @@ function onChange(value: unknown): void {
     :size="size"
     :text-color="textColor || undefined"
     :fill="fill || undefined"
-    @update:model-value="onChange"
+    @update:model-value="onUpdate"
   >
     <template v-if="variant === 'button'">
       <el-radio-button v-for="item in items" :key="String(item.value)" :value="item.value">

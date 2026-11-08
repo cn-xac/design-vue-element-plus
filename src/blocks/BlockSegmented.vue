@@ -4,7 +4,7 @@
  * 需要收集值请用单选框（radio）。
  */
 import { computed, ref } from "vue";
-import { parseLabels } from "../utils/parse";
+import { parseLabels } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{

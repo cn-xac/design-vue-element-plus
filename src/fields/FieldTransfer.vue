@@ -3,7 +3,7 @@
  * 穿梭框。选项用逗号分隔，key 直接用文字 —— 低代码里没人会去对 key 和 label。
  */
 import { computed } from "vue";
-import { parseLabels } from "../utils/parse";
+import { parseLabels } from "@x-ac/design-core";
 
 const props = withDefaults(
   defineProps<{
