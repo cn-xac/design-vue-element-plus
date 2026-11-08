@@ -9,6 +9,7 @@
  * 物料元数据暂时直接复用 core 的清单（P1 阶段保持单一事实来源），
  * P3 会在本包里补上 Element Plus 专有属性与 portability 标注。
  */
+import "./styles.css";
 import type { Component } from "vue";
 import { ElColorPicker, ElInput, ElInputNumber, ElMessage, ElSwitch } from "element-plus";
 import { type DesignerKit, type UiAdapter } from "@x-ac/design-core";

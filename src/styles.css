@@ -1,0 +1,21 @@
+/**
+ * Element Plus 专属视觉增强，只有装了本适配包才生效，引擎侧不依赖。
+ *
+ * 这里命中 Element Plus 的内部类名，补齐错误态描边、控件占满宽度与设计器
+ * 底部按钮的间距抹平。引擎自身不 import element-plus，也不认识任何库私有
+ * 类名；换成其它 UI 库时整份样式不加载，规则静默失效，渲染仍由 --wb-* 语义色负责。
+ */
+.wb-field.is-error .el-input__wrapper,
+.wb-field.is-error .el-textarea__inner,
+.wb-field.is-error .el-select__wrapper {
+  box-shadow: 0 0 0 1px var(--wb-danger) inset;
+}
+.wb-field .el-select,
+.wb-field .el-date-editor,
+.wb-field .el-input-number {
+  width: 100%;
+}
+.inspector__footer .el-button {
+  flex: 1;
+  margin-left: 0;
+}
