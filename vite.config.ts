@@ -16,6 +16,16 @@ export default defineConfig({
       include: ["src/**/*.ts", "src/**/*.vue"],
       insertTypesEntry: false,
       copyDtsFiles: false,
+      // tsconfig 的 paths 是本地联调用的（指向兄弟仓源码），
+      // 不能让它被改写进 d.ts —— 产物里的模块说明符必须是包名
+      pathsToAliases: false,
+      beforeWriteFile: (filePath, content) => ({
+        filePath,
+        content: content.replace(
+          /(?:\.\.\/)+[\w./-]*project\/packages\/(core|vue)\/src/g,
+          (_match, name: string) => `@x-ac/design-${name}`,
+        ),
+      }),
     }),
   ],
   build: {
@@ -27,7 +37,7 @@ export default defineConfig({
     sourcemap: true,
     emptyOutDir: false,
     rollupOptions: {
-      external: ["vue", "element-plus", /^element-plus\//, "@x-ac/design-core"],
+      external: ["vue", "element-plus", /^element-plus\//, "@x-ac/design-core", "@x-ac/design-vue"],
       output: {
         entryFileNames: "[name].js",
         assetFileNames: "style.css",

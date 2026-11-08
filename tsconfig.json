@@ -1,7 +1,14 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@x-ac/design-vue-element-plus": ["src/index.ts"],
+      // 本地联调：核心仓与引擎仓源码直接参与类型检查，改完立即生效，不依赖 dist
+      "@x-ac/design-core": ["../project/packages/core/src/index.ts"],
+      "@x-ac/design-vue": ["../project/packages/vue/src/index.ts"]
+    },
     "types": ["vite/client", "node"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "env.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "tests/**/*.ts", "env.d.ts"]
 }

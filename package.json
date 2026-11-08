@@ -4,6 +4,7 @@
   "type": "module",
   "description": "Element Plus 适配包：物料实现 + 双向绑定通道 + 动作副作用（供 @x-ac/design-vue 使用）",
   "license": "MIT",
+  "packageManager": "pnpm@12.15.0",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -40,23 +41,31 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "node ../../scripts/clean-dist.mjs dist && vite build",
+    "build": "node scripts/clean-dist.mjs dist && vite build",
     "prepack": "pnpm run build",
-    "typecheck": "vue-tsc -p tsconfig.json --noEmit"
-  },
-  "dependencies": {
-    "@x-ac/design-core": "workspace:*"
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "pnpm typecheck && pnpm test && pnpm build"
   },
   "peerDependencies": {
+    "@x-ac/design-core": "^0.4.0",
+    "@x-ac/design-vue": "^0.4.0",
     "element-plus": "^2.6.0",
     "vue": "^3.4.0"
   },
   "devDependencies": {
+    "@types/node": "^26.6.6",
     "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/test-utils": "^2.4.6",
+    "@x-ac/design-core": "link:../project/packages/core",
+    "@x-ac/design-vue": "link:../project/packages/vue",
     "element-plus": "^2.14.7",
+    "jsdom": "^25.0.1",
     "typescript": "^5.6.3",
     "vite": "^6.0.5",
     "vite-plugin-dts": "^4.3.0",
+    "vitest": "^3.2.7",
     "vue": "^3.5.13",
     "vue-tsc": "^2.1.10"
   }
