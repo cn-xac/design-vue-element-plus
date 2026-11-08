@@ -109,3 +109,21 @@ pnpm check          # typecheck + test + build
 4. 入口用 `defineVueAdapter` / `defineReactAdapter` 组装，不要手写 `UiAdapter` 字面量；通用工具一律从 `@x-ac/design-core` 取，不要在扩展仓复制解析函数。
 5. `vite.config.ts` 的 `rollupOptions.external` 加目标 UI 库与对应 `/kit` 子路径；`tsconfig#paths` 与 `vitest#alias` 把 `/kit` 挂在包别名之前。
 6. 只实现「物料实现 + 绑定通道 + 动作副作用」，不复制引擎逻辑；组件内不要调用 `inject` / `useUiAdapter`，保持可独立单测。
+7. **事件参数归一化（可选）**：若目标 UI 库派发的事件参数形状与其它库差异较大，在 adapter 上实现 `onEvent` 钩子统一形状，宿主拿到的 `UiEventPayload` 就与框架无关：
+
+   ```ts
+   import { defineVueAdapter } from "@x-ac/design-vue/kit";
+   import type { UiEventPayload } from "@x-ac/design-core";
+
+   const adapter = defineVueAdapter({
+     name: "my-ui",
+     components: COMPONENT_MAP,
+     materials: myMaterials,
+     onEvent: (p: UiEventPayload) => {
+       // 例如把 (value, event) 统一成 { value, nativeEvent }，或直接改写 p.args
+       p.args[0] = { value: p.value };
+     },
+   });
+   ```
+
+   引擎已把组件派发的**全部原始参数**放进 `p.args`，并提供 `p.value` / `p.nativeEvent` / `p.node` / `p.material` / `p.page` / `p.scope` / `p.actions`。钩子在预设动作之前执行，返回 `false` 或 `p.preventDefault()` 可阻断动作。`vue-*` 与 `react-*` 拿到的是同一份 payload 形状，无需分别适配。
