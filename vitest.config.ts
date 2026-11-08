@@ -1,8 +1,15 @@
 import { fileURLToPath, URL } from "node:url";
+import { existsSync, readFileSync } from "node:fs";
 import { defineConfig } from "vitest/config";
 import vue from "@vitejs/plugin-vue";
 
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+
+/** Vite 8 起 SSR 环境不自动注入 fs，defineProps<ImportedType>() 需要显式提供 */
+const sfcFs = {
+  fileExists: (file: string) => existsSync(file),
+  readFile: (file: string) => (existsSync(file) ? readFileSync(file, "utf8") : undefined),
+};
 
 /**
  * 扩展仓用例配置。
@@ -12,7 +19,7 @@ const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
  * 两仓并排开发时改完即刻生效，不依赖对方是否已构建 dist。
  */
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue({ script: { fs: sfcFs } })],
   resolve: {
     // 引擎源码来自兄弟仓，运行时也必须去重到本仓的 vue / element-plus，
     // 否则 provide/inject 与 reactivity 会跨副本静默失效
@@ -31,6 +38,7 @@ export default defineConfig({
     include: ["tests/**/*.spec.ts"],
     setupFiles: ["tests/setup.ts"],
     pool: "forks",
-    poolOptions: { forks: { singleFork: true } },
+    fileParallelism: false,
+    fsModuleCache: false,
   },
 });
