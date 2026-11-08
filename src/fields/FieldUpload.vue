@@ -5,6 +5,10 @@
  * 刻意把 `autoUpload` 默认设为 false：设计器里点一下按钮就真的发请求、
  * 往用户服务器上传文件，属于「打开页面就产生副作用」，比不好看危险得多。
  * 真正需要自动上传时再显式打开。
+ *
+ * 受控逻辑说明：本组件没有 modelValue prop、没有 defineEmits，文件列表由 ElUpload
+ * 内部管理，对外不暴露 v-model，也不存在 update:modelValue / change 的回写。
+ * 因此没有可迁移到 useFieldModel 的受控逻辑，保持原实现（props/emit 契约不变）。
  */
 withDefaults(
   defineProps<{

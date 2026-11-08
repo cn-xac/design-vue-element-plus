@@ -2,7 +2,9 @@
 /**
  * 业务组件示例：金额输入。千分位展示 + 精度控制 + 货币前缀。
  */
-withDefaults(
+import { useFieldModel } from "@x-ac/design-vue/kit";
+
+const props = withDefaults(
   defineProps<{
     modelValue?: unknown;
     placeholder?: string;
@@ -18,6 +20,12 @@ const emit = defineEmits<{
   (e: "update:modelValue", value: unknown): void;
   (e: "change", value: unknown): void;
 }>();
+
+const { onUpdate } = useFieldModel(
+  () => props.modelValue,
+  (value) => emit("update:modelValue", value),
+  (value) => emit("change", value),
+);
 
 function format(value: string | number): string {
   const text = String(value ?? "");
@@ -44,12 +52,7 @@ function parse(value: string): string {
     :parser="parse"
     controls-position="right"
     style="width: 100%"
-    @update:model-value="
-      (v: unknown) => {
-        emit('update:modelValue', v);
-        emit('change', v);
-      }
-    "
+    @update:model-value="onUpdate"
   >
     <template #prefix>¥</template>
   </el-input-number>

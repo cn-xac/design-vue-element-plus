@@ -4,6 +4,7 @@
  */
 import { computed } from "vue";
 import { parseLabels } from "@x-ac/design-core";
+import { useFieldModel } from "@x-ac/design-vue/kit";
 
 const props = withDefaults(
   defineProps<{
@@ -42,10 +43,11 @@ const buttons = computed(() => {
   return parts.length === 2 ? parts : undefined;
 });
 
-function onChange(value: unknown): void {
-  emit("update:modelValue", value);
-  emit("change", value);
-}
+const { onUpdate } = useFieldModel(
+  () => props.modelValue,
+  (value) => emit("update:modelValue", value),
+  (value) => emit("change", value),
+);
 </script>
 
 <template>
@@ -58,6 +60,6 @@ function onChange(value: unknown): void {
     :filter-placeholder="filterPlaceholder"
     :target-order="targetOrder"
     :disabled="disabled"
-    @update:model-value="onChange"
+    @update:model-value="onUpdate"
   />
 </template>

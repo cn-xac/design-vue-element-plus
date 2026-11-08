@@ -5,6 +5,7 @@
  */
 import { computed } from "vue";
 import { parsePaths } from "@x-ac/design-core";
+import { useFieldModel } from "@x-ac/design-vue/kit";
 
 const props = withDefaults(
   defineProps<{
@@ -35,6 +36,12 @@ const emit = defineEmits<{
   (e: "change", value: unknown): void;
 }>();
 
+const { onUpdate } = useFieldModel(
+  () => props.modelValue,
+  (value) => emit("update:modelValue", value),
+  (value) => emit("change", value),
+);
+
 const tree = computed(() => parsePaths(props.options));
 </script>
 
@@ -50,11 +57,6 @@ const tree = computed(() => parsePaths(props.options));
     :filterable="filterable"
     :show-checkbox="showCheckbox"
     :render-after-expand="false"
-    @update:model-value="
-      (v: unknown) => {
-        emit('update:modelValue', v);
-        emit('change', v);
-      }
-    "
+    @update:model-value="onUpdate"
   />
 </template>

@@ -4,6 +4,7 @@
  * 选项按字典编码从字典表取，Schema 里只存编码，换字典不用改页面。
  */
 import { computed } from "vue";
+import { useFieldModel } from "@x-ac/design-vue/kit";
 
 const props = withDefaults(
   defineProps<{
@@ -19,6 +20,12 @@ const emit = defineEmits<{
   (e: "update:modelValue", value: unknown): void;
   (e: "change", value: unknown): void;
 }>();
+
+const { onUpdate } = useFieldModel(
+  () => props.modelValue,
+  (value) => emit("update:modelValue", value),
+  (value) => emit("change", value),
+);
 
 const DICTS: Record<string, Array<{ label: string; value: string }>> = {
   priority: [
@@ -48,12 +55,7 @@ const items = computed(() => DICTS[props.dict] ?? DICTS.priority);
     :placeholder="placeholder"
     :disabled="disabled"
     clearable
-    @update:model-value="
-      (v: unknown) => {
-        emit('update:modelValue', v);
-        emit('change', v);
-      }
-    "
+    @update:model-value="onUpdate"
   >
     <el-option v-for="item in items" :key="item.value" :label="item.label" :value="item.value" />
   </el-select>

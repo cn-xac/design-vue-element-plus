@@ -46,6 +46,13 @@ function fetchSuggestions(query: string, callback: (items: Array<Record<string, 
   callback(matched.map((item) => ({ value: item })));
 }
 
+/**
+ * 受控逻辑保留手写实现、不套用 useFieldModel 的原因：
+ * 本组件 change 与模型回写不是同一条通道 —— @update:model-value 每次输入都会触发，
+ * 只负责回写 modelValue；change 则来自独立的 @select 事件，且取 item[valueKey]
+ * 做转换。useFieldModel 的 onUpdate 把回写与 change 绑在同一个值上一起触发，
+ * 直接套用会让每次按键都多抛一次 change、并丢掉 @select 的转换值，行为发生变化。
+ */
 function onInput(value: unknown): void {
   emit("update:modelValue", value);
 }

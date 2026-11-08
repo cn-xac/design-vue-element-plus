@@ -2,7 +2,9 @@
 /**
  * 标签输入。值是一个字符串数组，`max` 限制标签个数。
  */
-withDefaults(
+import { useFieldModel } from "@x-ac/design-vue/kit";
+
+const props = withDefaults(
   defineProps<{
     modelValue?: unknown;
     placeholder?: string;
@@ -35,10 +37,11 @@ const emit = defineEmits<{
   (e: "change", value: unknown): void;
 }>();
 
-function onChange(value: unknown): void {
-  emit("update:modelValue", value);
-  emit("change", value);
-}
+const { onUpdate } = useFieldModel(
+  () => props.modelValue,
+  (value) => emit("update:modelValue", value),
+  (value) => emit("change", value),
+);
 </script>
 
 <template>
@@ -54,6 +57,6 @@ function onChange(value: unknown): void {
     :tag-effect="tagEffect"
     :collapse-tags="collapseTags"
     :delimiter="delimiter || undefined"
-    @update:model-value="onChange"
+    @update:model-value="onUpdate"
   />
 </template>

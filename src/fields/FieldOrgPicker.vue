@@ -3,7 +3,9 @@
  * 业务组件示例：组织选择。
  * 真实项目替换为接口取数，这里内置一棵静态组织树，验证「业务组件走物料协议接入」的路径。
  */
-withDefaults(
+import { useFieldModel } from "@x-ac/design-vue/kit";
+
+const props = withDefaults(
   defineProps<{
     modelValue?: unknown;
     placeholder?: string;
@@ -17,6 +19,12 @@ const emit = defineEmits<{
   (e: "update:modelValue", value: unknown): void;
   (e: "change", value: unknown): void;
 }>();
+
+const { onUpdate } = useFieldModel(
+  () => props.modelValue,
+  (value) => emit("update:modelValue", value),
+  (value) => emit("change", value),
+);
 
 const ORG_TREE = [
   {
@@ -51,11 +59,6 @@ const ORG_TREE = [
     clearable
     filterable
     style="width: 100%"
-    @update:model-value="
-      (v: unknown) => {
-        emit('update:modelValue', v);
-        emit('change', v);
-      }
-    "
+    @update:model-value="onUpdate"
   />
 </template>

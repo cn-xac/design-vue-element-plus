@@ -2,7 +2,9 @@
 /**
  * 验证码输入。`length` 决定格子数，`mask` 把字符显示成圆点。
  */
-withDefaults(
+import { useFieldModel } from "@x-ac/design-vue/kit";
+
+const props = withDefaults(
   defineProps<{
     modelValue?: unknown;
     length?: number;
@@ -19,10 +21,11 @@ const emit = defineEmits<{
   (e: "change", value: unknown): void;
 }>();
 
-function onChange(value: unknown): void {
-  emit("update:modelValue", value);
-  emit("change", value);
-}
+const { onUpdate } = useFieldModel(
+  () => props.modelValue,
+  (value) => emit("update:modelValue", value),
+  (value) => emit("change", value),
+);
 </script>
 
 <template>
@@ -33,6 +36,6 @@ function onChange(value: unknown): void {
     :size="size"
     :mask="mask"
     :disabled="disabled"
-    @update:model-value="onChange"
+    @update:model-value="onUpdate"
   />
 </template>
