@@ -8,8 +8,9 @@
 import { describe, expect, it } from "vitest";
 import { mount } from "@vue/test-utils";
 import ElementPlus from "element-plus";
-import type { NodeSchema, PageSchema } from "@x-ac/design-core";
+import { missingComponents, type Material, type NodeSchema, type PageSchema } from "@x-ac/design-core";
 import { SchemaRenderer } from "@x-ac/design-vue";
+import { elementPlusAdapter, elementPlusMaterials } from "@x-ac/design-vue-element-plus";
 
 function page(children: NodeSchema[]): PageSchema {
   return {
@@ -114,5 +115,18 @@ describe("子表单（明细数组）", () => {
     // 内层子字段 ID 为 n_child_name，数据落在 form.items[0].children[0]
     expect(scope.form.items[0].children?.[0]).toHaveProperty("n_child_name");
     wrapper.unmount();
+  });
+});
+
+describe("子表单物料在 EP 清单中可见（设计器可拖入）", () => {
+  const subform = elementPlusMaterials.find((m: Material) => m.component === "ec-subform");
+
+  it("ec-subform 已注册、kind 为 subform、可接收子节点", () => {
+    // 物料来自 core 协议清单，经 patched 进入 EP 清单；无需在 EP 重复定义
+    expect(subform, "ec-subform 应出现在 EP 物料清单").toBeDefined();
+    expect(subform?.kind).toBe("subform");
+    expect(subform?.acceptsChildren).toBe(true);
+    // 引擎按 kind 渲染，不依赖 UI 库组件实现，故自检不应报缺组件
+    expect(missingComponents(elementPlusAdapter)).not.toContain("ec-subform");
   });
 });
