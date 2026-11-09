@@ -1,0 +1,87 @@
+# GitHub Pages 部署工作流（本包使用示例站点）
+#
+# 触发：
+#   - 推送 main 分支，且 examples / 本包 src / 工作流 / 锁文件 / workspace 配置有改动时自动部署；
+#   - 也支持在 Actions 页面手动 workflow_dispatch 触发。
+#
+# 部署内容：examples/ → 站点根 /（仓库 Pages 基路径 /design-vue-element-plus/）。
+#
+# 前置：仓库 Settings → Pages → Source = GitHub Actions。
+#
+# 说明：
+#   - 示例直接消费源码：本包（src）与内核/适配层（cn-xac/web-desgin 的 packages/*/src），
+#     因此 CI 需把 web-desgin 作为同级目录 checkout（与 publish.yml 一致），才能解析 link/alias 依赖。
+#   - 示例不在发布包内（package.json 的 files 仅含 dist/README/LICENSE）。
+#   - 与 publish.yml 职责分离：publish.yml 只发 npm 包，本工作流只管 Pages 演示站。
+
+name: Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "examples/**"
+      - "src/**"
+      - ".github/workflows/pages.yml"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build example site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout extension package
+        uses: actions/checkout@v4
+        with:
+          path: ext
+
+      - name: Checkout monorepo (resolves link/alias deps to @x-ac/design-core / design-vue)
+        uses: actions/checkout@v4
+        with:
+          repository: cn-xac/web-desgin
+          path: project
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        working-directory: ext
+        run: pnpm install --frozen-lockfile
+
+      - name: Build example
+        working-directory: ext
+        run: pnpm --filter ep-example build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ext/examples/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
