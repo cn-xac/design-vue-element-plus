@@ -1,0 +1,132 @@
+# 发布工作流：@x-ac/design-vue-element-plus → npm（可信发布 / OIDC / 免 token）
+#
+# 触发：
+#   - 推送 v* tag（如 v1.0.0）时自动发布
+#   - Actions 页面手动 workflow_dispatch 触发（默认 dry_run，仅验证流程、不上传 registry）
+#
+# 可信发布（npm Trusted Publishing，基于 OIDC）：
+#   - 不配置 NPM_TOKEN；GitHub Actions 用 OIDC 临时凭证直接发布，并生成 provenance 溯源徽章。
+#   - 前置（一次性，npmjs.com 操作）：包设置 → Publishing access → Add trusted publisher：
+#       owner = cn-xac, repository = design-vue-element-plus, Workflow 文件名 = publish.yml
+#     （若登记时填写了 Environment name，则必须与下方 jobs.publish.environment 一致；
+#      若未填 Environment，删除该 environment 块即可。）
+#   - 首次发布：该包尚未发过版，需先在 npm 创建/认领（scope 已是你的）再登记 Trusted Publisher。
+#
+# 技术约束（参照 cn-xac/regex 的可信发布范本）：
+#   - OIDC 要求 npm >= 11.5.1 → node-version: 24。
+#   - setup-node 显式写 registry-url（仅写入指向 npmjs 的 .npmrc，不设 NODE_AUTH_TOKEN → 纯 OIDC）。
+#   - jobs.publish.environment: npm 须与 npm Trusted Publisher 登记的 Environment（若有）一致。
+#   - 本包 devDependencies 用 link:../project/packages/{core,vue} 指向 cn-xac/web-desgin 源码，
+#     故 CI 把该 monorepo checkout 到 project/、本仓到 ext/，使 ext/../project 命中 link 路径。
+#   - 本仓 checkout 到 ext/（根目录无 package.json），故 pnpm/action-setup 须显式写 version。
+#
+# 本工作流只负责「安装 + 门禁 + 构建 + 发布」，不建 tag、不 push。
+# tag 由开发者本地：git tag -s v1.0.0 -m "release 1.0.0" 后推送。
+
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 只跑门禁与 publish --dry-run，不上传 registry
+        type: boolean
+        default: true
+        required: false
+
+# 同一时刻只允许一个发布任务，且运行中不可被取消。
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+# 最小权限：contents 只读用于检出；id-token 用于向 GitHub 申请 OIDC 令牌。
+# 刻意不声明任何 npm 相关 secrets —— 发布身份完全由 OIDC 可信发布者换取。
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # 必须与 npmjs 上「Trusted Publisher」登记的 Environment 名一致
+    # （若登记时未填 Environment，删除本块即可）。
+    environment: npm
+    steps:
+      - name: Checkout extension package
+        uses: actions/checkout@v7
+        with:
+          path: ext
+
+      - name: Checkout monorepo (resolves link: deps to @x-ac/design-core / design-vue)
+        uses: actions/checkout@v7
+        with:
+          repository: cn-xac/web-desgin
+          path: project
+
+      # 本仓 checkout 到 ext/，根目录无 package.json → 必须显式指定 pnpm 版本
+      # （若把仓 checkout 到根目录则可省略，参照 cn-xac/regex 的做法）。
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12.15.0
+
+      # registry-url 仅写入指向 npmjs 的 .npmrc（不设 NODE_AUTH_TOKEN → 纯 OIDC）。
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org/
+          cache: pnpm
+          cache-dependency-path: ext/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: ext
+        run: pnpm install --frozen-lockfile
+
+      # 全量门禁：构建/类型/测试任一失败都在此早停，此时尚未产生任何对外发布。
+      - name: Type check
+        working-directory: ext
+        run: pnpm typecheck
+
+      - name: Test
+        working-directory: ext
+        run: pnpm test
+
+      - name: Build
+        working-directory: ext
+        run: pnpm build
+
+      # 版本一致性：tag 后缀必须等于包 version；防手滑。手动触发跳过。
+      - name: Verify tag matches package version
+        if: github.event_name == 'push'
+        shell: bash
+        working-directory: ext
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          echo "tag=$TAG package=$PKG"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "::error::tag v$TAG 与 package version $PKG 不一致"
+            exit 1
+          fi
+
+      # 手动触发默认路径：与真发版同一条命令，只多一个 --dry-run（除上传 registry 外做尽一切）。
+      # 刻意不带 --provenance —— 来源证明要绑定真实发布，dry-run 下无意义。
+      - name: Publish (dry run)
+        if: github.event_name == 'workflow_dispatch' && inputs.dry_run
+        working-directory: ext
+        run: pnpm publish --access public --no-git-checks --ignore-scripts --dry-run
+
+      # --ignore-scripts：dist 已在上一步产出，跳过 prepack 的重复构建，也杜绝发布钩子递归。
+      # --provenance：生成来源证明（需 public 仓库）。
+      # --no-git-checks：Actions 检出为 detached tag，关闭 pnpm 的干净工作区检查。
+      # 条件：tag 触发（inputs.dry_run 为 null → !null = true）必定执行；
+      #       手动触发只有显式勾掉 dry_run 才执行。
+      - name: Publish to npm (trusted publishing, no token)
+        if: github.event_name != 'workflow_dispatch' || !inputs.dry_run
+        working-directory: ext
+        run: pnpm publish --access public --provenance --no-git-checks --ignore-scripts
