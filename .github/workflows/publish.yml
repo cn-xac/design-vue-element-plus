@@ -60,7 +60,7 @@ jobs:
         with:
           path: ext
 
-      - name: Checkout monorepo (resolves link: deps to @x-ac/design-core / design-vue)
+      - name: "Checkout monorepo (resolves link: deps to @x-ac/design-core / design-vue)"
         uses: actions/checkout@v7
         with:
           repository: cn-xac/web-desgin
