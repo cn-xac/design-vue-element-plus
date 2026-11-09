@@ -54,11 +54,11 @@ scripts/clean-dist.mjs
 
 ```jsonc
 "peerDependencies": {
-  "@x-ac/design-core": "^0.4.0", "@x-ac/design-vue": "^0.4.0",
+  "@x-ac/design-core": "^1.0.0", "@x-ac/design-vue": "^1.0.0",
   "element-plus": "^2.6.0", "vue": "^3.4.0"
 }
 
-// 尚未发版，用本地 link 联调
+// 本地联调仍用 link 指向上游源码（与 CI 同构）
 "devDependencies": { "@x-ac/design-core": "link:../project/packages/core",
                      "@x-ac/design-vue": "link:../project/packages/vue" }
 ```
@@ -84,6 +84,40 @@ F:\web\web-design\
 2. 绑定通道用 `{ prop: "value", event: "onChange" }`（`REACT_BINDING`），不是 `modelValue / onUpdate:modelValue`；
 3. 注入用 `<ReactDesignProvider adapter>` 或 `createReactDesign(adapter)`，优先级 `ui` prop > Provider > `nativeAdapter`；
 4. `design-react` 暂无设计器，`UiAdapter.designer / editors / provider / propAliases` 暂不消费，实现 `components / materials / binding / actions` 四件套即可。
+
+## 使用示例（Examples）
+
+`examples/` 是一个最小可运行的演示站（Vite + Vue3 + Element Plus），源码驱动、直接消费本仓 `src` 与上游 `@x-ac/design-core` / `@x-ac/design-vue` 的源码，等价于「克隆即跑」。
+
+```bash
+pnpm install
+pnpm --filter ep-example dev      # 本地预览 http://127.0.0.1:5174
+pnpm --filter ep-example build    # 产物到 examples/dist
+```
+
+演示了三件事：
+
+1. **一行接入**：`app.use(createVueDesign({ adapter: elementPlusAdapter }))` 注入适配包；
+2. **Schema 渲染**：`<SchemaRenderer :page="page" v-model:data="data" />` 渲染协议物料（`ec-input` / `ec-select` / `ec-switch` / `ec-button` …）；
+3. **内核能力**：`toJSON(page)` 导出、`validatePage(page)` 校验、`@node-event` 收到框架无关的 `UiEventPayload`。
+
+最小用法：
+
+```ts
+import { createApp } from "vue";
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
+import { createVueDesign } from "@x-ac/design-vue";
+import "@x-ac/design-vue/style.css";
+import { elementPlusAdapter } from "@x-ac/design-vue-element-plus";
+
+createApp(App)
+  .use(ElementPlus)
+  .use(createVueDesign({ adapter: elementPlusAdapter }))
+  .mount("#app");
+```
+
+> 在线示例站通过 GitHub Pages 自动部署（`.github/workflows/pages.yml`：推 `main` 且示例 / 源码 / 工作流 / 锁文件有改动即发布，基路径 `/design-vue-element-plus/`）。需先在仓库 **Settings → Pages → Source 选 GitHub Actions**。
 
 ## 命令
 
