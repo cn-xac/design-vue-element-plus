@@ -1,65 +1,69 @@
 # GitHub Pages 部署工作流（本包使用示例站点）
 #
-# 触发：
-#   - 推送 main 分支，且 examples / 本包 src / 工作流 / 锁文件 / workspace 配置有改动时自动部署；
-#   - 也支持在 Actions 页面手动 workflow_dispatch 触发。
+# 触发：推送 main 分支，且 examples / 本包 src / 工作流 / 锁文件 / workspace 配置有改动时自动部署；
+#       也支持 Actions 页面手动 workflow_dispatch。
 #
-# 部署内容：examples/ → 站点根 /（仓库 Pages 基路径 /design-vue-element-plus/）。
-#
-# 前置：仓库 Settings → Pages → Source = GitHub Actions。
+# 部署内容：examples/ → 站点基路径 /design-vue-element-plus/。
+# 前置：仓库 Settings → Pages → Source = GitHub Actions（本工作流用 configure-pages 的
+#       enablement 自动开启，首次也会尝试置为 workflow 模式）。
 #
 # 说明：
 #   - 示例直接消费源码：本包（src）与内核/适配层（cn-xac/web-desgin 的 packages/*/src），
-#     因此 CI 需把 web-desgin 作为同级目录 checkout（与 publish.yml 一致），才能解析 link/alias 依赖。
-#   - 示例不在发布包内（package.json 的 files 仅含 dist/README/LICENSE）。
+#     故 CI 把 web-desgin checkout 到 project/、本仓到 ext/，解析 link/alias 依赖。
+#   - 示例不在发布包内（files 仅含 dist/README/LICENSE）。
 #   - 与 publish.yml 职责分离：publish.yml 只发 npm 包，本工作流只管 Pages 演示站。
+#   - 本仓 checkout 到 ext/（根目录无 package.json），故 pnpm/action-setup 须显式写 version。
 
-name: Pages
+name: Deploy example site to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
-      - "examples/**"
-      - "src/**"
-      - ".github/workflows/pages.yml"
-      - "pnpm-lock.yaml"
-      - "pnpm-workspace.yaml"
-      - "package.json"
+      - 'examples/**'
+      - 'src/**'
+      - '.github/workflows/pages.yml'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
   workflow_dispatch:
 
+# Pages deploy 需要 pages:write + id-token:write（OIDC attestation for deployment）
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 同一时刻只允许一个 deploy 任务；进行中的旧任务被取消（Pages 是幂等重发）
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
   build:
-    name: Build example site
     runs-on: ubuntu-latest
     steps:
       - name: Checkout extension package
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: ext
+          persist-credentials: false
 
       - name: Checkout monorepo (resolves link/alias deps to @x-ac/design-core / design-vue)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: cn-xac/web-desgin
           path: project
+          persist-credentials: false
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      # 本仓 checkout 到 ext/，根目录无 package.json → 必须显式指定 pnpm 版本
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
         with:
           version: 12.15.0
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -73,14 +77,23 @@ jobs:
         working-directory: ext
         run: pnpm --filter ep-example build
 
-      - uses: actions/configure-pages@v5
+      # 产物硬校验：避免「build 绿但 examples/dist 缺失」导致 Pages 白屏。
+      - name: Verify build artifacts
+        working-directory: ext
+        run: test -f examples/dist/index.html || (echo "::error::examples/dist/index.html 缺失" && exit 1)
 
-      - uses: actions/upload-pages-artifact@v3
+      # 基路径 /design-vue-element-plus/ 由 examples/vite.config.ts 的 base 决定。
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ext/examples/dist
 
   deploy:
-    name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
     environment:
@@ -88,4 +101,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
