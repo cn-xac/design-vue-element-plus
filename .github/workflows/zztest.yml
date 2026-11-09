@@ -1,0 +1,17 @@
+name: zztest
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
