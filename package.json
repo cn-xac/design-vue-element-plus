@@ -1,9 +1,17 @@
 {
   "name": "@x-ac/design-vue-element-plus",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "type": "module",
   "description": "基于 @x-ac/design-vue/kit 适配层的 Element Plus 扩展包：物料实现 + 绑定通道 + 动作副作用 + 设计器控件",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cn-xac/design-vue-element-plus.git"
+  },
+  "homepage": "https://github.com/cn-xac/design-vue-element-plus#readme",
+  "bugs": {
+    "url": "https://github.com/cn-xac/design-vue-element-plus/issues"
+  },
   "packageManager": "pnpm@12.15.0",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -49,8 +57,8 @@
     "check": "pnpm typecheck && pnpm test && pnpm build"
   },
   "peerDependencies": {
-    "@x-ac/design-core": "^0.4.0",
-    "@x-ac/design-vue": "^0.4.0",
+    "@x-ac/design-core": "^1.0.0",
+    "@x-ac/design-vue": "^1.0.0",
     "element-plus": "^2.6.0",
     "vue": "^3.4.0"
   },
