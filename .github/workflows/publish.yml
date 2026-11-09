@@ -43,12 +43,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release
   cancel-in-progress: false
-
-defaults:
-  run:
-    working-directory: ext
 
 jobs:
   publish:
@@ -68,26 +64,36 @@ jobs:
           # 若 web-desgin 为私有仓库，需改用工蜂/PAT：
           # token: ${{ secrets.CI_MONOREPO_PAT }}
 
-      - uses: pnpm/action-setup@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.15.0
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+          cache-dependency-path: ext/pnpm-lock.yaml
 
       - name: Install dependencies
+        working-directory: ext
         run: pnpm install --frozen-lockfile
 
       - name: Type check
+        working-directory: ext
         run: pnpm typecheck
 
       - name: Test
+        working-directory: ext
         run: pnpm test
 
       - name: Build
+        working-directory: ext
         run: pnpm build
 
       # tokenless OIDC：不配置 NPM_TOKEN，靠 id-token: write + --provenance 完成发布与溯源证明。
       # --no-git-checks：因同级 checkout 的 project/ 在本仓视角属未跟踪目录，跳过 working-tree 校验。
       - name: Publish to npm (trusted publishing, no token)
+        working-directory: ext
         run: pnpm publish --access public --no-git-checks --provenance
