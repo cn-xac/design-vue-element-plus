@@ -6,9 +6,14 @@ import { buildPage, nodeForMaterial, isModal } from "../helpers";
 
 const props = defineProps<{ material: Material }>();
 
+// material.component 已是 `ec-` 前缀协议名；弹层判定需用裸名比对。
+const bare = props.material.component.startsWith("ec-")
+  ? props.material.component.slice(3)
+  : props.material.component;
+
 const uid = `m_${props.material.component}`;
 const data = ref<Record<string, unknown>>({});
-const modal = isModal(props.material.component);
+const modal = isModal(bare);
 const show = ref(false);
 
 const node = computed(() => {
@@ -32,7 +37,7 @@ function onEvent(_p: UiEventPayload): void {
   <div class="mat-card">
     <div class="mat-head">
       <span class="mat-title">{{ material.title }}</span>
-      <code class="mat-comp">ec-{{ material.component }}</code>
+      <code class="mat-comp">{{ material.component }}</code>
     </div>
     <div class="mat-body">
       <template v-if="modal">

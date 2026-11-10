@@ -63,14 +63,17 @@ export function isModal(component: string): boolean {
 
 /** 把一份物料元数据翻译成一个可直接被 SchemaRenderer 渲染的节点。 */
 export function nodeForMaterial(m: Material, uid: string): NodeSchema {
+  // m.component 已是 `ec-` 前缀的协议名（如 ec-card），直接作为渲染键即可；
+  // 裸名（card）仅用于和裸名集合（needsOptions / MODAL_COMPONENTS）比对。
+  const bare = m.component.startsWith("ec-") ? m.component.slice(3) : m.component;
   const props: Record<string, unknown> = { ...(m.defaultProps ?? {}) };
   if (isFieldMaterial(m)) {
     props.label = m.title;
     props.modelValue = `{{${uid}}}`;
-    if (needsOptions(m.component)) props.options = defaultOptions(m.component);
+    if (needsOptions(bare)) props.options = defaultOptions(bare);
   }
-  const node: NodeSchema = { id: uid, component: `ec-${m.component}`, props };
-  if (m.acceptsChildren && !isModal(m.component)) {
+  const node: NodeSchema = { id: uid, component: m.component, props };
+  if (m.acceptsChildren && !isModal(bare)) {
     node.children = [{ id: `${uid}_child`, component: "ec-text", props: { text: `${m.title} 的内容区域` } }];
   }
   return node;
