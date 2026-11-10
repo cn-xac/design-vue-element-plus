@@ -2,7 +2,7 @@
 /**
  * 验证码输入。`length` 决定格子数，`mask` 把字符显示成圆点。
  */
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

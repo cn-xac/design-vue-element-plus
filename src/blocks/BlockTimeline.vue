@@ -3,7 +3,7 @@
  * 时间线。每项写成「时间:内容」；只写一项时按纯内容处理。
  */
 import { computed } from "vue";
-import { parsePairs } from "@x-ac/design-core";
+import { parsePairs } from "@x-ac/web-design-core";
 
 const props = withDefaults(
   defineProps<{

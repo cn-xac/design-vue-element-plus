@@ -4,7 +4,7 @@
  * 内容区支持 {{}} 表达式 —— 文本走插值，渲染器在 props 层已经求值。
  */
 import { computed, ref, watch } from "vue";
-import { parsePairs } from "@x-ac/design-core";
+import { parsePairs } from "@x-ac/web-design-core";
 
 const props = withDefaults(
   defineProps<{

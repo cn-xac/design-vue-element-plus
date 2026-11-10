@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Component } from "vue";
-import { designerKit } from "@x-ac/design-vue-element-plus";
+import { designerKit } from "@x-ac/web-design-vue-element-plus";
 
 // designerKit 是「设计器自身 UI」的 Element Plus 实现（D3）：
 // 宿主用哪套 UI 库，低代码设计器的按钮 / 输入框 / 下拉就长什么样，

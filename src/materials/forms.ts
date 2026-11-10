@@ -5,7 +5,7 @@
  * `label`（字段外壳的标签）、`modelValue`（数据绑定路径）、必填规则交给校验面板。
  * 其余字段一律与 EP 组件 prop 同名，渲染时直接透传。
  */
-import type { PropField } from "@x-ac/design-core";
+import type { PropField } from "@x-ac/web-design-core";
 import type { EpMaterial } from "./blocks";
 
 const SIZE_OPTIONS = [

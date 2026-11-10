@@ -4,7 +4,7 @@
  * 把引擎的归一化语义（default / primary / danger / text）翻成 Element Plus 的属性组合。
  */
 import { computed } from "vue";
-import type { DesignerControlProps } from "@x-ac/design-core";
+import type { DesignerControlProps } from "@x-ac/web-design-core";
 
 /** 归一化属性契约来自 core，Vue 与 React 扩展仓共用同一份语义 */
 const props = withDefaults(defineProps<DesignerControlProps>(), {

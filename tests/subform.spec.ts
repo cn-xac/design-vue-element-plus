@@ -8,9 +8,9 @@
 import { describe, expect, it } from "vitest";
 import { mount } from "@vue/test-utils";
 import ElementPlus from "element-plus";
-import { missingComponents, type Material, type NodeSchema, type PageSchema } from "@x-ac/design-core";
-import { SchemaRenderer } from "@x-ac/design-vue";
-import { elementPlusAdapter, elementPlusMaterials } from "@x-ac/design-vue-element-plus";
+import { missingComponents, type Material, type NodeSchema, type PageSchema } from "@x-ac/web-design-core";
+import { SchemaRenderer } from "@x-ac/web-design-vue";
+import { elementPlusAdapter, elementPlusMaterials } from "@x-ac/web-design-vue-element-plus";
 
 function page(children: NodeSchema[]): PageSchema {
   return {

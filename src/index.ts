@@ -1,5 +1,5 @@
 /**
- * @x-ac/design-vue-element-plus —— Element Plus 适配包。
+ * @x-ac/web-design-vue-element-plus —— Element Plus 适配包。
  *
  * 提供三样东西，缺一不可：
  * 1. components：协议物料名（ec-input）→ Element Plus 组件；
@@ -12,9 +12,9 @@
 import "./styles.css";
 import type { Component } from "vue";
 import { ElColorPicker, ElInput, ElInputNumber, ElMessage, ElSwitch } from "element-plus";
-import { type DesignerKit, type UiAdapter } from "@x-ac/design-core";
-// 本包基于 @x-ac/design-vue 的适配层 SDK 组装，不再手写 UiAdapter 字面量
-import { VUE_BINDING, createDesignerKit, defineVueAdapter } from "@x-ac/design-vue/kit";
+import { type DesignerKit, type UiAdapter } from "@x-ac/web-design-core";
+// 本包基于 @x-ac/web-design-vue 的适配层 SDK 组装，不再手写 UiAdapter 字面量
+import { VUE_BINDING, createDesignerKit, defineVueAdapter } from "@x-ac/web-design-vue/kit";
 import { COMPONENT_MAP, resolveComponent } from "./components";
 import { elementPlusMaterials } from "./materials";
 import { elementAdapter, runActions } from "./actions";

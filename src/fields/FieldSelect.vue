@@ -7,8 +7,8 @@
  * 属性面板里能设的，就是 EP 真实支持的。
  */
 import { computed } from "vue";
-import { parseOptions } from "@x-ac/design-core";
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { parseOptions } from "@x-ac/web-design-core";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

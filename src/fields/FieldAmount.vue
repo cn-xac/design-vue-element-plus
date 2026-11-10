@@ -2,7 +2,7 @@
 /**
  * 业务组件示例：金额输入。千分位展示 + 精度控制 + 货币前缀。
  */
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

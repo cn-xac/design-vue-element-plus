@@ -22,7 +22,7 @@ function onSelect(key: string): void {
   <div class="layout">
     <aside class="side">
       <div class="brand">
-        <div class="brand-name">@x-ac/design-vue-element-plus</div>
+        <div class="brand-name">@x-ac/web-design-vue-element-plus</div>
         <div class="brand-sub">Element Plus 适配包 · 示例站</div>
       </div>
       <el-menu :default-active="active" class="nav" @select="onSelect">

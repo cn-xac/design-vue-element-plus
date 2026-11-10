@@ -3,8 +3,8 @@
  * 单选框组。`variant` 决定用原生圆点还是按钮样式（EP 的 radio-button）。
  */
 import { computed } from "vue";
-import { parseOptions } from "@x-ac/design-core";
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { parseOptions } from "@x-ac/web-design-core";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

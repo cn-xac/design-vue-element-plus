@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { SchemaRenderer } from "@x-ac/design-vue";
-import type { Material, PageSchema, UiEventPayload } from "@x-ac/design-core";
+import { SchemaRenderer } from "@x-ac/web-design-vue";
+import type { Material, PageSchema, UiEventPayload } from "@x-ac/web-design-core";
 import { buildPage, nodeForMaterial, isModal } from "../helpers";
 
 const props = defineProps<{ material: Material }>();

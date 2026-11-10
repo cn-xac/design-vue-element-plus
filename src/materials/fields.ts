@@ -12,7 +12,7 @@
  *   「看起来能设、其实没效果」的假开关，比不提供更糟；
  * - 所有字段显式标注 group 与 portability，不依赖键名推断。
  */
-import type { PropField } from "@x-ac/design-core";
+import type { PropField } from "@x-ac/web-design-core";
 
 const SIZE_OPTIONS = [
   { label: "大", value: "large" },

@@ -49,7 +49,7 @@ jobs:
           path: ext
           persist-credentials: false
 
-      - name: Checkout monorepo (resolves link/alias deps to @x-ac/design-core / design-vue)
+      - name: Checkout monorepo (resolves link/alias deps to @x-ac/web-design-core / design-vue)
         uses: actions/checkout@v7
         with:
           repository: cn-xac/web-desgin

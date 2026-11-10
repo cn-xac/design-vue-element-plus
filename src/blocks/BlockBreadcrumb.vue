@@ -3,7 +3,7 @@
  * 面包屑。每项写成「文案:链接」，链接留空则只显示文字。
  */
 import { computed } from "vue";
-import { parsePairs } from "@x-ac/design-core";
+import { parsePairs } from "@x-ac/web-design-core";
 
 const props = withDefaults(
   defineProps<{

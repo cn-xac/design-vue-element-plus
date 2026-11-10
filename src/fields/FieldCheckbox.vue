@@ -4,8 +4,8 @@
  * 数据校验走物料属性里的「必填 / 最少选 N 项」规则。
  */
 import { computed } from "vue";
-import { parseOptions } from "@x-ac/design-core";
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { parseOptions } from "@x-ac/web-design-core";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

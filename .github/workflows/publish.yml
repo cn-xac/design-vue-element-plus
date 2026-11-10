@@ -1,4 +1,4 @@
-# 发布工作流：@x-ac/design-vue-element-plus → npm（可信发布 / OIDC / 免 token）
+# 发布工作流：@x-ac/web-design-vue-element-plus → npm（可信发布 / OIDC / 免 token）
 #
 # 触发：
 #   - 推送 v* tag（如 v1.0.0）时自动发布
@@ -61,7 +61,7 @@ jobs:
         with:
           path: ext
 
-      - name: "Checkout monorepo (resolves link: deps to @x-ac/design-core / design-vue)"
+      - name: "Checkout monorepo (resolves link: deps to @x-ac/web-design-core / design-vue)"
         uses: actions/checkout@v7
         with:
           repository: cn-xac/web-desgin

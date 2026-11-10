@@ -175,10 +175,10 @@ importers:
       '@vue/test-utils':
         specifier: ^2.5.1
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@5.9.3))
-      '@x-ac/design-core':
+      '@x-ac/web-design-core':
         specifier: link:../project/packages/core
         version: link:../project/packages/core
-      '@x-ac/design-vue':
+      '@x-ac/web-design-vue':
         specifier: link:../project/packages/vue
         version: link:../project/packages/vue
       element-plus:

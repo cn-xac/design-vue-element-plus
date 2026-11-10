@@ -2,7 +2,7 @@
 /**
  * 标签输入。值是一个字符串数组，`max` 限制标签个数。
  */
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

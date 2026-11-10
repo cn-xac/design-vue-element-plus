@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { SchemaRenderer, toJSON, validatePage } from "@x-ac/design-vue";
-import type { PageSchema, UiEventPayload } from "@x-ac/design-core";
-import { elementAdapter } from "@x-ac/design-vue-element-plus";
+import { SchemaRenderer, toJSON, validatePage } from "@x-ac/web-design-vue";
+import type { PageSchema, UiEventPayload } from "@x-ac/web-design-core";
+import { elementAdapter } from "@x-ac/web-design-vue-element-plus";
 import { buildPage } from "../helpers";
 
 // 表单数据集中在 data.form 下；v-model:data 把整个 data 作为渲染作用域，

@@ -9,7 +9,7 @@
  * 第 3 类统一标 `portable: false`：换到别的 UI 库这些物料不存在，
  * 参与跨库一致性测试没有意义，静态 HTML 导出也该老实给占位。
  */
-import { bareKey, MATERIALS, materialKey, mergeFields, tagPortability, type Material } from "@x-ac/design-core";
+import { bareKey, MATERIALS, materialKey, mergeFields, tagPortability, type Material } from "@x-ac/web-design-core";
 import { EP_BLOCK_MATERIALS, type EpMaterial } from "./blocks";
 import { EP_FIELD_PATCHES } from "./fields";
 import { EP_FORM_MATERIALS } from "./forms";

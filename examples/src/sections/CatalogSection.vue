@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { elementPlusMaterials } from "@x-ac/design-vue-element-plus";
-import type { Material } from "@x-ac/design-core";
+import { elementPlusMaterials } from "@x-ac/web-design-vue-element-plus";
+import type { Material } from "@x-ac/web-design-core";
 import MaterialCard from "./MaterialCard.vue";
 
 // 按物料分类聚合，分类顺序：表单 → 布局 → 展示 → 导航 → 交互 → 业务。

@@ -9,10 +9,10 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { mount } from "@vue/test-utils";
 import ElementPlus from "element-plus";
-import type { NodeSchema, PageSchema } from "@x-ac/design-core";
-import { missingComponents, MATERIALS } from "@x-ac/design-core";
-import { SchemaRenderer } from "@x-ac/design-vue";
-import { elementPlusAdapter, elementPlusMaterials, EP_FIELD_PATCHES } from "@x-ac/design-vue-element-plus";
+import type { NodeSchema, PageSchema } from "@x-ac/web-design-core";
+import { missingComponents, MATERIALS } from "@x-ac/web-design-core";
+import { SchemaRenderer } from "@x-ac/web-design-vue";
+import { elementPlusAdapter, elementPlusMaterials, EP_FIELD_PATCHES } from "@x-ac/web-design-vue-element-plus";
 
 beforeAll(() => {
   if (!("ResizeObserver" in globalThis)) {
@@ -224,7 +224,7 @@ describe("属性分组", () => {
   });
 
   it("分组按 基础 → 内容 → 数据 → 外观 → 高级 排序", async () => {
-    const { groupFields } = await import("@x-ac/design-core");
+    const { groupFields } = await import("@x-ac/web-design-core");
     const select = elementPlusMaterials.find((material) => material.component === "ec-select")!;
     const groups = groupFields(select.fields).map((entry) => entry.group);
 

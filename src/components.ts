@@ -1,5 +1,5 @@
 import type { Component } from "vue";
-import { materialKey, prefixedComponents } from "@x-ac/design-core";
+import { materialKey, prefixedComponents } from "@x-ac/web-design-core";
 import {
   ElAlert,
   ElButton,

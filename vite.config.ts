@@ -24,7 +24,7 @@ export default defineConfig({
         content: content.replace(
           /(?:\.\.\/)+[\w./-]*project\/packages\/(core|vue)\/src([\w./-]*)/g,
           (_match, name: string, rest: string) =>
-            `@x-ac/design-${name}${rest.startsWith("/kit") ? "/kit" : ""}`,
+            `@x-ac/web-design-${name}${rest.startsWith("/kit") ? "/kit" : ""}`,
         ),
       }),
     }),
@@ -42,9 +42,9 @@ export default defineConfig({
         "vue",
         "element-plus",
         /^element-plus\//,
-        "@x-ac/design-core",
-        "@x-ac/design-vue",
-        "@x-ac/design-vue/kit",
+        "@x-ac/web-design-core",
+        "@x-ac/web-design-vue",
+        "@x-ac/web-design-vue/kit",
       ],
       output: {
         entryFileNames: "[name].js",

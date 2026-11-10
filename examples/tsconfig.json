@@ -14,10 +14,10 @@
     "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@x-ac/design-vue-element-plus": ["../src/index.ts"],
-      "@x-ac/design-vue": ["../../project/packages/vue/src/index.ts"],
-      "@x-ac/design-vue/kit": ["../../project/packages/vue/src/kit.ts"],
-      "@x-ac/design-core": ["../../project/packages/core/src/index.ts"]
+      "@x-ac/web-design-vue-element-plus": ["../src/index.ts"],
+      "@x-ac/web-design-vue": ["../../project/packages/vue/src/index.ts"],
+      "@x-ac/web-design-vue/kit": ["../../project/packages/vue/src/kit.ts"],
+      "@x-ac/web-design-core": ["../../project/packages/core/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "env.d.ts"]

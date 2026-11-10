@@ -4,7 +4,7 @@
  * 选项按字典编码从字典表取，Schema 里只存编码，换字典不用改页面。
  */
 import { computed } from "vue";
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

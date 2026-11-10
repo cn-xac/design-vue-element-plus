@@ -4,8 +4,8 @@
  * 区别只在于下拉里是可展开的树而不是级联列。
  */
 import { computed } from "vue";
-import { parsePaths } from "@x-ac/design-core";
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { parsePaths } from "@x-ac/web-design-core";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

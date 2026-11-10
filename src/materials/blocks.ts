@@ -5,7 +5,7 @@
  * 换成别的 UI 库时整个消失（`portable: false` 由 index.ts 统一标注）。
  * 物料名依旧走裸名 → `ec-` 前缀的归一化，Schema 里存的是 `ec-tabs`。
  */
-import type { Material, PropField } from "@x-ac/design-core";
+import type { Material, PropField } from "@x-ac/web-design-core";
 
 export type EpMaterial = Omit<Material, "component" | "fields"> & {
   component: string;

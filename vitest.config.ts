@@ -26,11 +26,11 @@ export default defineConfig({
     dedupe: ["vue", "element-plus"],
     alias: [
       // 自引用走源码，避免用例依赖已构建的 dist
-      { find: "@x-ac/design-vue-element-plus", replacement: r("./src/index.ts") },
-      { find: "@x-ac/design-core", replacement: r("../project/packages/core/src/index.ts") },
+      { find: "@x-ac/web-design-vue-element-plus", replacement: r("./src/index.ts") },
+      { find: "@x-ac/web-design-core", replacement: r("../project/packages/core/src/index.ts") },
       // 顺序敏感：子路径必须先于包别名，否则会被拼成 index.ts/kit
-      { find: "@x-ac/design-vue/kit", replacement: r("../project/packages/vue/src/kit.ts") },
-      { find: "@x-ac/design-vue", replacement: r("../project/packages/vue/src/index.ts") },
+      { find: "@x-ac/web-design-vue/kit", replacement: r("../project/packages/vue/src/kit.ts") },
+      { find: "@x-ac/web-design-vue", replacement: r("../project/packages/vue/src/index.ts") },
     ],
   },
   test: {

@@ -3,7 +3,7 @@
  * 业务组件示例：组织选择。
  * 真实项目替换为接口取数，这里内置一棵静态组织树，验证「业务组件走物料协议接入」的路径。
  */
-import { useFieldModel } from "@x-ac/design-vue/kit";
+import { useFieldModel } from "@x-ac/web-design-vue/kit";
 
 const props = withDefaults(
   defineProps<{

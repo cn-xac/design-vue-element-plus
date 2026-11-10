@@ -1,6 +1,6 @@
 /**
  * 动作执行器的 Vue / Element Plus 适配。
- * 核心逻辑在 @x-ac/design-core，这里只提供宿主能力（提示框、确认框）。
+ * 核心逻辑在 @x-ac/web-design-core，这里只提供宿主能力（提示框、确认框）。
  */
 
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -10,7 +10,7 @@ import {
   type ActionContext,
   type ActionNotifyType,
   type ActionSchema,
-} from "@x-ac/design-core";
+} from "@x-ac/web-design-core";
 
 export interface VueActionContext extends Omit<ActionContext, "adapter"> {
   adapter?: ActionAdapter;

@@ -4,7 +4,7 @@
  * 容器模式下需要被链接的节点带 id，低代码里一般配合「容器」物料的节点 ID 使用。
  */
 import { computed } from "vue";
-import { parsePairs } from "@x-ac/design-core";
+import { parsePairs } from "@x-ac/web-design-core";
 
 const props = withDefaults(
   defineProps<{
