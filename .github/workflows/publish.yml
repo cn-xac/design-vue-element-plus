@@ -2,7 +2,8 @@
 #
 # 触发：
 #   - 推送 v* tag（如 v1.0.0）时自动发布
-#   - Actions 页面手动 workflow_dispatch 触发（默认 dry_run，仅验证流程、不上传 registry）
+#   - Actions 页面手动 workflow_dispatch 触发（默认即真实发布；
+#     如需只验证流程、不上传 registry，手动触发时勾选 dry_run 输入框）
 #
 # 可信发布（npm Trusted Publishing，基于 OIDC）：
 #   - 不配置 NPM_TOKEN；GitHub Actions 用 OIDC 临时凭证直接发布，并生成 provenance 溯源徽章。
@@ -32,9 +33,9 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 只跑门禁与 publish --dry-run，不上传 registry
+        description: 只跑门禁与 publish --dry-run，不上传 registry（默认 false = 真实发布）
         type: boolean
-        default: true
+        default: false
         required: false
 
 # 同一时刻只允许一个发布任务，且运行中不可被取消。
