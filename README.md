@@ -87,7 +87,7 @@ F:\web\web-design\
 
 ## 使用示例（Examples）
 
-`examples/` 是一个最小可运行的演示站（Vite + Vue3 + Element Plus），源码驱动、直接消费本仓 `src` 与上游 `@x-ac/design-core` / `@x-ac/design-vue` 的源码，等价于「克隆即跑」。
+`examples/` 是一个可运行的演示站（Vite + Vue3 + Element Plus），源码驱动、直接消费本仓 `src` 与上游 `@x-ac/design-core` / `@x-ac/design-vue` 的源码，等价于「克隆即跑」。站内分三个栏目，覆盖适配包的主要能力：
 
 ```bash
 pnpm install
@@ -95,11 +95,13 @@ pnpm --filter ep-example dev      # 本地预览 http://127.0.0.1:5174
 pnpm --filter ep-example build    # 产物到 examples/dist
 ```
 
-演示了三件事：
+三个栏目演示了：
 
-1. **一行接入**：`app.use(createVueDesign({ adapter: elementPlusAdapter }))` 注入适配包；
-2. **Schema 渲染**：`<SchemaRenderer :page="page" v-model:data="data" />` 渲染协议物料（`ec-input` / `ec-select` / `ec-switch` / `ec-button` …）；
-3. **内核能力**：`toJSON(page)` 导出、`validatePage(page)` 校验、`@node-event` 收到框架无关的 `UiEventPayload`。
+1. **表单与数据绑定**：一份 Schema 串起 18 类 Element Plus 表单控件，全部经 `v-model:data` 双向绑定到 `data.form`；提交触发内核 `validatePage` 校验并调用适配包的 `elementAdapter.notify`（ElMessage 副作用），重置清空作用域，`toJSON(page)` 导出 Schema。覆盖 `ec-input` / `ec-number` / `ec-select` / `ec-radio` / `ec-checkbox` / `ec-switch` / `ec-date` / `ec-time-picker` / `ec-slider` / `ec-rate` / `ec-color-picker` / `ec-autocomplete` / `ec-input-tag` / `ec-cascader` / `ec-tree-select` / `ec-transfer` / `ec-textarea` / `ec-upload` 等。
+2. **物料总览**：用 `elementPlusMaterials` 按分类聚合，把本包实现的**全部**协议物料（`ec-card` / `ec-tabs` / `ec-steps` / `ec-timeline` / `ec-table` / `ec-progress` / `ec-statistic` / `ec-dialog` / `ec-drawer` …）逐张实时渲染预览，每张卡片即一份最小 Schema。
+3. **设计器适配（D3）**：直接取出适配包导出的 `designerKit`，渲染设计器自身的 Element Plus 控件（按钮 / 输入 / 下拉 / 分段器 / 颜色 / 开关），说明「设计态与上线态同 UI」。
+
+核心接入仍是一行：`app.use(createVueDesign({ adapter: elementPlusAdapter }))`；渲染用 `<SchemaRenderer :page="page" v-model:data="data" />`，事件通过 `@node-event` 收到框架无关的 `UiEventPayload`。
 
 最小用法：
 
