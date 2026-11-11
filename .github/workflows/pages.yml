@@ -3,7 +3,7 @@
 # 触发：推送 main 分支，且 examples / 本包 src / 工作流 / 锁文件 / workspace 配置有改动时自动部署；
 #       也支持 Actions 页面手动 workflow_dispatch。
 #
-# 部署内容：examples/ → 站点基路径 /design-vue-element-plus/。
+# 部署内容：examples/ → 站点基路径 /web-design-vue-element-plus/。
 # 前置：仓库 Settings → Pages → Source = GitHub Actions（本工作流用 configure-pages 的
 #       enablement 自动开启，首次也会尝试置为 workflow 模式）。
 #
@@ -82,7 +82,7 @@ jobs:
         working-directory: ext
         run: test -f examples/dist/index.html || (echo "::error::examples/dist/index.html 缺失" && exit 1)
 
-      # 基路径 /design-vue-element-plus/ 由 examples/vite.config.ts 的 base 决定。
+      # 基路径 /web-design-vue-element-plus/ 由 examples/vite.config.ts 的 base 决定。
       - name: Configure Pages
         uses: actions/configure-pages@v6
         with:

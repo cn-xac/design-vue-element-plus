@@ -8,7 +8,7 @@
 # 可信发布（npm Trusted Publishing，基于 OIDC）：
 #   - 不配置 NPM_TOKEN；GitHub Actions 用 OIDC 临时凭证直接发布，并生成 provenance 溯源徽章。
 #   - 前置（一次性，npmjs.com 操作）：包设置 → Publishing access → Add trusted publisher：
-#       owner = cn-xac, repository = design-vue-element-plus, Workflow 文件名 = publish.yml
+#       owner = cn-xac, repository = web-design-vue-element-plus, Workflow 文件名 = publish.yml
 #     （若登记时填写了 Environment name，则必须与下方 jobs.publish.environment 一致；
 #      若未填 Environment，删除该 environment 块即可。）
 #   - 首次发布：该包尚未发过版，需先在 npm 创建/认领（scope 已是你的）再登记 Trusted Publisher。

@@ -6,11 +6,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cn-xac/design-vue-element-plus.git"
+    "url": "git+https://github.com/cn-xac/web-design-vue-element-plus.git"
   },
-  "homepage": "https://github.com/cn-xac/design-vue-element-plus#readme",
+  "homepage": "https://github.com/cn-xac/web-design-vue-element-plus#readme",
   "bugs": {
-    "url": "https://github.com/cn-xac/design-vue-element-plus/issues"
+    "url": "https://github.com/cn-xac/web-design-vue-element-plus/issues"
   },
   "packageManager": "pnpm@12.15.0",
   "main": "./dist/index.js",

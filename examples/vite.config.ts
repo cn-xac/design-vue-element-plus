@@ -10,8 +10,8 @@ const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 const isPages = process.env.NODE_ENV === "production";
 
 export default defineConfig({
-  // 本地 dev 走根路径；构建产物部署到 GitHub Pages 项目页（仓库 design-vue-element-plus）时基路径为 /design-vue-element-plus/。
-  base: isPages ? "/design-vue-element-plus/" : "/",
+  // 本地 dev 走根路径；构建产物部署到 GitHub Pages 项目页（仓库 web-design-vue-element-plus）时基路径为 /web-design-vue-element-plus/。
+  base: isPages ? "/web-design-vue-element-plus/" : "/",
   plugins: [vue()],
   resolve: {
     dedupe: ["vue", "element-plus", "@x-ac/web-design-core", "@x-ac/web-design-vue"],

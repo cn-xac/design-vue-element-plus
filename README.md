@@ -1,4 +1,4 @@
-# design-vue-element-plus
+# web-design-vue-element-plus
 
 `@x-ac/web-design-vue-element-plus`：基于 `@x-ac/web-design-vue/kit` 适配层实现的 Element Plus 扩展仓（物料实现 + 绑定通道 + 动作副作用 + 设计器控件）。
 从 `web-desgin` 主仓拆出的独立单包仓库，仓库根即包根。
@@ -10,7 +10,7 @@
 | 内核 | `web-desgin` → `@x-ac/web-design-core` | 框架无关的协议与通用工具：Schema、`UiAdapter` 契约、解析工具、`defineAdapter` |
 | Vue 适配层 | `web-desgin` → `@x-ac/web-design-vue` | Vue 运行时引擎（渲染器 + 设计器）+ `@x-ac/web-design-vue/kit` 组件作者 SDK |
 | React 适配层 | `web-desgin` → `@x-ac/web-design-react` | React 运行时引擎 + `@x-ac/web-design-react/kit` 组件作者 SDK |
-| 扩展（本仓） | `design-vue-element-plus` | 基于 `/kit` 组装 Element Plus 适配包，`vue-*` 扩展的参考实现 |
+| 扩展（本仓） | `web-design-vue-element-plus` | 基于 `/kit` 组装 Element Plus 适配包，`vue-*` 扩展的参考实现 |
 | 未来扩展 | `vue-icon-xxx`、`react-antd` … | `vue-*` 基于 `web-design-vue/kit`，`react-*` 基于 `web-design-react/kit`，各自独立仓库 |
 
 **分层原则**：框架无关的协议与工具一律进 `core`；框架相关但 UI 库无关的引擎与组件作者 SDK 在对应适配层；只有具体 UI 库的物料实现放扩展仓。
@@ -68,7 +68,7 @@ scripts/clean-dist.mjs
 ```
 F:\web\web-design\
   project\                     # 核心仓（core / vue / react）
-  design-vue-element-plus\     # 本仓
+  web-design-vue-element-plus\     # 本仓
 ```
 
 - `tsconfig.json#paths`：`@x-ac/web-design-vue/kit` → `../project/packages/vue/src/kit.ts`
@@ -119,7 +119,7 @@ createApp(App)
   .mount("#app");
 ```
 
-> 在线示例站通过 GitHub Pages 自动部署（`.github/workflows/pages.yml`：推 `main` 且示例 / 源码 / 工作流 / 锁文件有改动即发布，基路径 `/design-vue-element-plus/`）。需先在仓库 **Settings → Pages → Source 选 GitHub Actions**。
+> 在线示例站通过 GitHub Pages 自动部署（`.github/workflows/pages.yml`：推 `main` 且示例 / 源码 / 工作流 / 锁文件有改动即发布，基路径 `/web-design-vue-element-plus/`）。需先在仓库 **Settings → Pages → Source 选 GitHub Actions**。
 
 ## 命令
 
