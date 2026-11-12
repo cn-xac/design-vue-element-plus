@@ -56,7 +56,8 @@ jobs:
           path: project
           persist-credentials: false
 
-      # 本仓 checkout 到 ext/，根目录无 package.json → 必须显式指定 pnpm 版本
+      # 本仓 checkout 到 ext/（根目录有 package.json 且声明了 packageManager 字段，
+      # 但 pnpm/action-setup 默认不在 ext/ 下读取该字段），故须显式指定 pnpm 版本以保持一致。
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
