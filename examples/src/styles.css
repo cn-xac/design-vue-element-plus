@@ -11,6 +11,8 @@ body,
 #app {
   height: 100%;
   margin: 0;
+  /* 视口固定：文档级滚动一律禁用，滚动只发生在各区域容器内部 */
+  overflow: hidden;
 }
 
 body {
@@ -19,92 +21,199 @@ body {
   background: #f5f7fa;
 }
 
-/* ===== 布局 ===== */
-.layout {
-  display: flex;
-  min-height: 100vh;
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  background: #eef1f6;
+  color: #c0341d;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
-.side {
-  width: 280px;
-  flex: 0 0 280px;
-  background: #1f2937;
-  color: #e5e7eb;
+/* ===== 壳层：头部常驻 + 内容区各自内部滚动 ===== */
+.demo {
   display: flex;
   flex-direction: column;
-  padding: 20px 0;
-  position: sticky;
-  top: 0;
-  align-self: flex-start;
-  height: 100vh;
+  height: 100%;
+  gap: 12px;
+  padding: 16px 20px 20px;
 }
 
-.brand {
-  padding: 0 20px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.demo__head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 0 0 auto;
 }
 
-.brand-name {
+.demo__head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.demo__title {
+  margin: 0;
+  font-size: 18px;
   font-weight: 700;
-  font-size: 14px;
-  word-break: break-all;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
-.brand-sub {
+.demo__desc {
+  margin: 0;
   font-size: 12px;
-  opacity: 0.7;
-  margin-top: 6px;
+  line-height: 1.7;
+  color: #5b6168;
 }
 
-.nav {
-  background: transparent;
-  border-right: none;
+.demo__tabs {
+  flex: 0 0 auto;
+}
+
+.demo__panel {
   flex: 1;
-  margin-top: 12px;
+  min-height: 0;
+  display: flex;
+  gap: 16px;
 }
 
-.side .el-menu {
-  background: transparent;
-  border-right: none;
-}
-
-.side .el-menu-item {
-  color: #cbd5e1;
-}
-
-.side .el-menu-item.is-active {
-  background: rgba(64, 158, 255, 0.22);
-  color: #fff;
-}
-
-.side-foot {
-  padding: 16px 20px 0;
-  font-size: 12px;
-  opacity: 0.85;
-}
-
-.side-foot code {
-  display: block;
-  margin-top: 6px;
-  background: rgba(0, 0, 0, 0.32);
-  padding: 8px 10px;
+.demo__tip {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  background: #ecf5ff;
+  border: 1px solid #b3d8ff;
   border-radius: 6px;
-  font-size: 11px;
-  word-break: break-all;
+  font-size: 12px;
   line-height: 1.6;
-  font-family: "SFMono-Regular", Consolas, monospace;
+  margin-bottom: 8px;
 }
 
-.content {
+/* ===== 设计器 ===== */
+.demo__panel--designer {
+  flex-direction: column;
+}
+
+.demo__designer {
   flex: 1;
-  padding: 28px 40px 60px;
+  min-height: 0;
+  background: #fff;
+  border: 1px solid #e5e6eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* 设计器来自 @x-ac/web-design-vue/designer 的 .designer 根节点，补齐高度让它撑满容器 */
+.demo__designer > .designer {
+  height: 100%;
+}
+
+/* ===== 渲染器 ===== */
+.demo__runtime {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #e5e6eb;
+  border-radius: 8px;
+  padding: 20px;
   overflow: auto;
 }
 
-/* ===== 区块标题 ===== */
+.demo__side {
+  width: 340px;
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e5e6eb;
+  border-radius: 8px;
+  padding: 16px;
+  overflow: auto;
+}
+
+.demo__side-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.demo__side-title {
+  margin: 8px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3a3f47;
+}
+
+.demo__side-head .demo__side-title {
+  margin: 0;
+}
+
+.demo__code {
+  margin: 0;
+  padding: 10px;
+  background: #f7f8fa;
+  border: 1px solid #e5e6eb;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: #4b5563;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.demo__events {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.demo__events li[data-kind="submit"] {
+  color: #409eff;
+}
+.demo__events li[data-kind="hook"] {
+  color: #8e44ad;
+}
+
+.demo__event-kind {
+  display: inline-block;
+  min-width: 58px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.demo__side-note {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #8a9099;
+}
+
+/* ===== 物料总览（保持原实现，仅放宽容器与卡片）=====
+   旧布局里 .section 被限制在 1180px 且左侧还有 280px 菜单，
+   卡片实际只有 220px 宽，Element Plus 的 select / date / transfer 全被挤扁。
+   现在菜单换成顶部页签，内容区占满视口；卡片最小宽度提到 360px，
+   宽物料（穿梭框 / 表格 / 标签页…）通过 :has() 跨两列，不再需要横向滚动找内容。 */
+.demo__panel--catalog {
+  display: block;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
+  padding: 24px 28px 40px;
+  /* 以面板实际内容宽度作为跨列判断依据，与视口宽度/内边距解耦 */
+  container-type: inline-size;
+  container-name: catalog;
+}
+
 .section {
-  max-width: 1180px;
+  max-width: none;
 }
 
 .section-head {
@@ -149,55 +258,6 @@ body {
   margin-top: 18px;
 }
 
-/* ===== 表单区 ===== */
-.form-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 24px;
-  align-items: start;
-}
-
-.toolbar {
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.warn {
-  color: #d83931;
-  font-size: 13px;
-}
-
-.panel {
-  background: #fff;
-  border: 1px solid #e6e9ef;
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-}
-
-.panel-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #3a3f47;
-  margin-bottom: 8px;
-}
-
-.panel-pre {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-break: break-all;
-  color: #4b5563;
-  max-height: 360px;
-  overflow: auto;
-}
-
-/* ===== 物料总览 ===== */
 .cat-group {
   margin-bottom: 26px;
 }
@@ -222,20 +282,49 @@ body {
 
 .mat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 14px;
+  /* min() 保证窄屏下卡片不会撑破容器 */
+  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* 天生需要横向空间的物料：占两列。用 :has() 按渲染出的 EP 根类名识别，
+   不改 MaterialCard.vue，保证「物料总览」这份样板代码在另一个任务里可原样参考。
+   用容器查询而非视口宽度：两列最小需要 360*2+16=736px，留 24px 余量取 760px；
+   只有面板内容区真的排得下两列时才跨列，否则 span 2 会创建隐式列导致横向溢出。 */
+@container catalog (min-width: 760px) {
+  .mat-card:has(.el-transfer),
+  .mat-card:has(.el-table),
+  .mat-card:has(.el-tabs),
+  .mat-card:has(.el-cascader),
+  .mat-card:has(.el-descriptions),
+  .mat-card:has(.el-timeline),
+  .mat-card:has(.el-carousel),
+  .mat-card:has(.el-calendar),
+  .mat-card:has(.el-menu),
+  .mat-card:has(.el-steps),
+  .mat-card:has(.el-collapse),
+  .mat-card:has(.el-anchor) {
+    grid-column: span 2;
+  }
 }
 
 .mat-card {
   background: #fff;
   border: 1px solid #e6e9ef;
   border-radius: 10px;
-  padding: 12px 14px;
+  padding: 14px 16px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 120px;
+  min-height: 132px;
+  min-width: 0;
+}
+
+/* 卡片内渲染器不要被自身 max-width 限制，撑满卡片可用宽度 */
+.mat-body > .wb-renderer {
+  max-width: none;
 }
 
 .mat-head {
@@ -273,34 +362,63 @@ body {
   margin: 0;
 }
 
-/* ===== 设计器 D3 ===== */
-.kit-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+/* ===== 适配包清单 ===== */
+.demo__panel--adapter .demo__runtime {
+  padding: 24px;
 }
 
-.kit-card {
-  background: #fff;
-  border: 1px solid #e6e9ef;
-  border-radius: 10px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+.adapter__title {
+  margin: 0 0 8px;
+  font-size: 20px;
 }
 
-.kit-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #6b7280;
-}
-
-.kit-inline {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.adapter__desc {
+  margin: 0 0 16px;
+  color: #5b6168;
   font-size: 13px;
-  color: #4b5563;
+  line-height: 1.8;
+  max-width: 920px;
+}
+
+.adapter__alert {
+  margin-bottom: 16px;
+}
+
+.adapter__stats {
+  margin-bottom: 20px;
+}
+
+.adapter__subtitle {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #2b3038;
+}
+
+.adapter__slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.adapter__hint {
+  margin: 0 0 20px;
+  color: #8a9099;
+  font-size: 12px;
+  line-height: 1.8;
+  max-width: 920px;
+}
+
+@media (max-width: 900px) {
+  .demo__panel--runtime {
+    flex-direction: column;
+  }
+  .demo__side {
+    width: 100%;
+    flex: 0 0 auto;
+    max-height: 40vh;
+  }
+  .demo {
+    padding: 12px;
+  }
 }

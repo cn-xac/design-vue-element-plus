@@ -1,43 +1,84 @@
 <script setup lang="ts">
+/**
+ * 完整 Vue 实例：一个适配包，两个引擎能力，一个物料总览，一个自检面板。
+ *
+ * - 「设计器」：SchemaDesigner 用 elementPlusAdapter，属性面板/顶栏/物料面板全是 Element Plus 组件；
+ * - 「渲染器」：SchemaRenderer 消费同一份 PageSchema，只做「用组件渲染 + 导出数据 + 派发事件」；
+ * - 「物料总览」：本包特色的分类卡片网格（另一任务里 web-design-react-antd 会参考它实现）；
+ * - 「适配包清单」：可视化本包注册了哪些组件与配置，印证架构分层。
+ *
+ * 布局策略：视口固定（html/body/#app overflow hidden），页签常驻头部，各区域在自身容器内滚动，
+ * 不产生文档级滚动 —— 与 design-react-antd 示例一致，避免整页上下翻导致组件难以定位。
+ *
+ * 设计器与渲染器通过内存仓储共享 Schema：设计器保存后渲染器重新读取，
+ * 直观看到「设计时搭的 Schema → 运行时画出真实页面」这条链路。
+ */
 import { ref } from "vue";
-import FormSection from "./sections/FormSection.vue";
-import CatalogSection from "./sections/CatalogSection.vue";
+import { createMemoryRepository } from "@x-ac/web-design-core";
+import type { PageSchema } from "@x-ac/web-design-core";
+import { PAGE_ID, seedPage, seedData } from "./schema";
 import DesignerSection from "./sections/DesignerSection.vue";
+import RuntimeSection from "./sections/RuntimeSection.vue";
+import CatalogSection from "./sections/CatalogSection.vue";
+import AdapterSection from "./sections/AdapterSection.vue";
 
-type SectionKey = "form" | "catalog" | "designer";
+type TabKey = "designer" | "runtime" | "catalog" | "adapter";
 
-const active = ref<SectionKey>("form");
-const menus: { key: SectionKey; label: string }[] = [
-  { key: "form", label: "表单与数据绑定" },
-  { key: "catalog", label: "物料总览" },
-  { key: "designer", label: "设计器适配（D3）" },
+const active = ref<TabKey>("designer");
+const tabs: { label: string; value: TabKey }[] = [
+  { label: "设计器", value: "designer" },
+  { label: "渲染器", value: "runtime" },
+  { label: "物料总览", value: "catalog" },
+  { label: "适配包清单", value: "adapter" },
 ];
 
-function onSelect(key: string): void {
-  active.value = key as SectionKey;
+/** 设计器与渲染器共用同一份仓储；seed 一份预置页面 */
+const repository = createMemoryRepository([seedPage()]);
+const schema = ref<PageSchema>(seedPage());
+const data = ref<Record<string, unknown>>(seedData);
+
+/** 设计器保存 / 导出 Schema 后，把最新 Schema 交给渲染器 */
+function reloadSchema(): void {
+  const record = repository.get(PAGE_ID);
+  if (record) schema.value = JSON.parse(JSON.stringify(record.schema)) as PageSchema;
 }
 </script>
 
 <template>
-  <div class="layout">
-    <aside class="side">
-      <div class="brand">
-        <div class="brand-name">@x-ac/web-design-vue-element-plus</div>
-        <div class="brand-sub">Element Plus 适配包 · 示例站</div>
+  <main class="demo">
+    <header class="demo__head">
+      <div class="demo__head-row">
+        <h1 class="demo__title">@x-ac/web-design-vue-element-plus</h1>
+        <el-segmented v-model="active" :options="tabs" class="demo__tabs" />
       </div>
-      <el-menu :default-active="active" class="nav" @select="onSelect">
-        <el-menu-item v-for="m in menus" :key="m.key" :index="m.key">{{ m.label }}</el-menu-item>
-      </el-menu>
-      <div class="side-foot">
-        <p>接入仅需一行：</p>
-        <code>app.use(createVueDesign({ adapter: elementPlusAdapter }))</code>
-      </div>
-    </aside>
+      <p class="demo__desc">
+        引擎只提供架构；适配包注册组件与组件配置，引擎整合成设计器与渲染器。属性设置面板用的也是这里注册的 Element Plus 组件。
+        接入只需一行：<code>app.use(createVueDesign({ adapter: elementPlusAdapter }))</code>
+      </p>
+    </header>
 
-    <main class="content">
-      <FormSection v-show="active === 'form'" />
-      <CatalogSection v-show="active === 'catalog'" />
-      <DesignerSection v-show="active === 'designer'" />
-    </main>
-  </div>
+    <DesignerSection
+      v-show="active === 'designer'"
+      :page-id="PAGE_ID"
+      :repository="repository"
+      @saved="reloadSchema"
+    />
+
+    <RuntimeSection
+      v-show="active === 'runtime'"
+      :page="schema"
+      :data="data"
+    />
+
+    <!-- 物料总览：保持本包原实现不变，仅换一个可滚动的容器 -->
+    <section v-show="active === 'catalog'" class="demo__panel demo__panel--catalog">
+      <CatalogSection />
+    </section>
+
+    <section v-show="active === 'adapter'" class="demo__panel demo__panel--adapter">
+      <div class="demo__runtime">
+        <AdapterSection />
+      </div>
+    </section>
+  </main>
 </template>
