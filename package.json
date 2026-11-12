@@ -49,6 +49,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "dev": "pnpm --filter ep-example dev",
+    "preview": "pnpm --filter ep-example preview",
     "build": "node scripts/clean-dist.mjs dist && vite build",
     "prepack": "pnpm run build",
     "typecheck": "vue-tsc -p tsconfig.json --noEmit",
