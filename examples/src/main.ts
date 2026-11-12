@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import { createVueDesign } from "@x-ac/web-design-vue";
@@ -9,6 +10,8 @@ import App from "./App.vue";
 
 const app = createApp(App);
 app.use(ElementPlus);
+// 设计器（@x-ac/web-design-vue/designer）的 store 基于 pinia，须先挂载单例。
+app.use(createPinia());
 // 全局注入 Element Plus 适配包：宿主应用只需这一行即可接入 Schema 渲染与数据绑定。
 app.use(createVueDesign({ adapter: elementPlusAdapter }));
 app.mount("#app");
