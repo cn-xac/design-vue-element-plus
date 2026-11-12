@@ -18,15 +18,19 @@ import type { PageRepository } from "@x-ac/web-design-core";
 
 defineProps<{ pageId: string; repository: PageRepository }>();
 
-const emit = defineEmits<{ saved: [] }>();
+const emit = defineEmits<{ saved: []; preview: [] }>();
 
-/** 示例站没有页面列表与独立预览页，给个明确提示，避免按钮点了没反应 */
+/** 示例站没有页面列表，给个明确提示，避免 back 按钮点了没反应 */
 function onBack(): void {
   ElMessage.info("示例站没有页面列表；设计器已嵌在当前页签内");
 }
 
+/**
+ * 预览：DesignerView.preview() 已先 save() 把当前设计写入仓储再 emit，
+ * 这里只上抛事件，切页签与提示交给 App 统一处理。
+ */
 function onPreview(): void {
-  ElMessage.info("点顶栏「保存」后切到「渲染器」页签即可查看运行时效果");
+  emit("preview");
 }
 </script>
 
