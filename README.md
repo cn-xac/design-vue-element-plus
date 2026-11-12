@@ -4,6 +4,26 @@
 
 ---
 
+## 面向 AI / 自动化协作者
+
+本仓库有一份**专用 AI 文档 [`AGENTS.md`](./AGENTS.md)**（与开发者 README 分离），内含可直接复用的配方、import 符号来源、Schema 构造规则与任务对照表。**AI 落地任务前请先读 `AGENTS.md`，不要仅凭推断猜 API。**
+
+本仓文件索引（按任务需要读取）：
+
+| 你想做的事 | 先读 |
+|---|---|
+| 了解整体用法 / 快速上手 | 本文件「快速上手」「常见场景配方」 |
+| 调用本包的现成配方、确认 API 与符号来源 | `AGENTS.md` |
+| 看本包如何实现某个物料（字段 / 区块 / 设计器控件） | `src/fields/*`、`src/blocks/*`、`src/designer/*` |
+| 看物料注册与适配包组装 | `src/index.ts`、`src/components.ts`、`src/materials/*` |
+| 看动作副作用（toast / confirm / submit 等） | `src/actions.ts` |
+| 跑可运行示例 / 看完整页签能力 | `examples/src/*`（尤其 `App.vue`、`schema.ts`） |
+| 引擎 / 内核的真实公开 API（渲染器、设计器、仓储） | 见 `AGENTS.md` 第 3 节，内含上游包精确路径（`project/packages/vue/...`、`core/...`） |
+
+约定：源码使用 LF 换行；修改前务必先读真实源码，不要凭命名推断组件 props 或动作参数。
+
+---
+
 ## 快速上手（怎么用）
 
 ### 1. 安装
