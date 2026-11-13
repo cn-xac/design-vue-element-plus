@@ -20,63 +20,8 @@ const SIZE_OPTIONS = [
 
 export const EP_BLOCK_MATERIALS: EpMaterial[] = [
   /* ---------------- 布局 ---------------- */
-  {
-    component: "row",
-    title: "栅格行",
-    category: "布局",
-    kind: "layout",
-    icon: "▤",
-    acceptsChildren: true,
-    defaultProps: { gutter: 0, justify: "start", align: "top", wrap: true },
-    fields: [
-      { key: "gutter", label: "列间距(px)", type: "number", min: 0, group: "style", portability: "visual" },
-      {
-        key: "justify",
-        label: "水平对齐",
-        type: "select",
-        options: [
-          { label: "起始", value: "start" },
-          { label: "居中", value: "center" },
-          { label: "末尾", value: "end" },
-          { label: "两端", value: "space-between" },
-          { label: "环绕", value: "space-around" },
-          { label: "均分", value: "space-evenly" },
-        ],
-        group: "style",
-        portability: "visual",
-      },
-      {
-        key: "align",
-        label: "垂直对齐",
-        type: "select",
-        options: [
-          { label: "顶部", value: "top" },
-          { label: "居中", value: "middle" },
-          { label: "底部", value: "bottom" },
-        ],
-        group: "style",
-        portability: "visual",
-      },
-      { key: "wrap", label: "自动换行", type: "boolean", group: "style", portability: "visual" },
-    ],
-    hint: "24 栅格布局的行，把「栅格列」拖进来分配宽度",
-  },
-  {
-    component: "col",
-    title: "栅格列",
-    category: "布局",
-    kind: "layout",
-    icon: "▥",
-    acceptsChildren: true,
-    defaultProps: { span: 12, offset: 0, sm: 0, md: 0 },
-    fields: [
-      { key: "span", label: "宽度(1-24)", type: "number", min: 1, max: 24, group: "basic", portability: "visual" },
-      { key: "offset", label: "左侧间隔", type: "number", min: 0, max: 23, group: "style", portability: "visual" },
-      { key: "sm", label: "小屏宽度", type: "number", min: 0, max: 24, group: "advanced", portability: "visual", tip: "0 表示沿用通用宽度" },
-      { key: "md", label: "中屏宽度", type: "number", min: 0, max: 24, group: "advanced", portability: "visual" },
-    ],
-    hint: "必须放在「栅格行」里才有意义",
-  },
+  // 注：row / col 已上收为 core 通用物料（24 栅格 + 响应式断点 + order/flex），
+  // 由设计器在「布局」分组统一呈现，各适配层复用同一份定义，避免跨库分裂。
   {
     component: "scrollbar",
     title: "滚动区域",

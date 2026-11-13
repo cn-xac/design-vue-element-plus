@@ -213,6 +213,42 @@ describe("属性补丁与组件 prop 对齐", () => {
   });
 });
 
+describe("栅格 row / col（core 通用物料）", () => {
+  it("row 渲染为 el-row，col 渲染为 el-col 且 span 落到正确栅格类", () => {
+    const wrapper = mountNode({
+      id: "n_grid",
+      component: "ec-row",
+      props: { gutter: 16 },
+      children: [
+        { id: "n_c1", component: "ec-col", props: { span: 12 } },
+        { id: "n_c2", component: "ec-col", props: { span: 12 } },
+      ],
+    });
+    expect(wrapper.findComponent({ name: "ElRow" }).exists()).toBe(true);
+    const cols = wrapper.findAllComponents({ name: "ElCol" });
+    expect(cols).toHaveLength(2);
+    expect(cols.every((col) => col.classes().includes("el-col-12"))).toBe(true);
+    wrapper.unmount();
+  });
+
+  it("col span=0 折叠隐藏（el-col-0），offset 正确生成", () => {
+    const wrapper = mountNode({
+      id: "n_grid2",
+      component: "ec-row",
+      props: {},
+      children: [
+        { id: "n_c1", component: "ec-col", props: { span: 8, offset: 2 } },
+        { id: "n_c2", component: "ec-col", props: { span: 0 } },
+      ],
+    });
+    const cols = wrapper.findAllComponents({ name: "ElCol" });
+    expect(cols[0].classes().includes("el-col-8")).toBe(true);
+    expect(cols[0].classes().includes("el-col-offset-2")).toBe(true);
+    expect(cols[1].classes().includes("el-col-0")).toBe(true);
+    wrapper.unmount();
+  });
+});
+
 describe("属性分组", () => {
   it("补丁字段都落在五个分组之一", () => {
     const allowed = new Set(["basic", "content", "data", "style", "advanced"]);
@@ -229,5 +265,31 @@ describe("属性分组", () => {
     const groups = groupFields(select.fields).map((entry) => entry.group);
 
     expect(groups).toEqual(["basic", "content", "data", "style", "advanced"]);
+  });
+});
+
+describe("设计态包裹层穿透（修复「列宽由内容撑开」）", () => {
+  it("设计态下栅格列包裹层带 wb-node--passthrough（display:contents），不再打断 el-row > el-col", () => {
+    const wrapper = mount(SchemaRenderer, {
+      props: {
+        page: page([
+          {
+            id: "n_grid",
+            component: "ec-row",
+            props: {},
+            children: [{ id: "n_c1", component: "ec-col", props: { span: 12 } }],
+          },
+        ]),
+        design: true,
+      },
+      global: { plugins: [ElementPlus] },
+    });
+
+    // col 包裹层带穿透类：根因修复点（包裹层改为 display:contents，列回到行的直系 flex 子项）
+    expect(wrapper.find(".wb-node--passthrough").exists()).toBe(true);
+    // el-row 真实渲染，且穿透类落在 col 节点的包裹层上（而非 el-col 本身）
+    expect(wrapper.findComponent({ name: "ElRow" }).exists()).toBe(true);
+    expect(wrapper.find(".el-col-12").exists()).toBe(true);
+    wrapper.unmount();
   });
 });
